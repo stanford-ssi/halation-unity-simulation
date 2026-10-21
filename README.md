@@ -40,7 +40,8 @@ Leaving the terrain patch resets the rover to its starting point.
 
 The companion rover and web-controller repository is [stanford-ssi/halation](https://github.com/stanford-ssi/halation).
 ROS control requires a running ROS 2 rosbridge server; this Unity repository does not include the bridge or web app.
-The simulation-specific Docker and web-controller changes in the local development setup have not been published with this project.
+The simulation bridge and web-controller changes are on the [`unity-simulation` branch](https://github.com/stanford-ssi/halation/tree/unity-simulation), pending [pull request #15](https://github.com/stanford-ssi/halation/pull/15).
+Until that pull request is merged, use that branch and follow its [local simulation setup](https://github.com/stanford-ssi/halation/blob/unity-simulation/docker/simulation/README.md).
 
 Set **Rover > Rover Ros Client > Bridge Url** to your rosbridge WebSocket address.
 The default is `ws://127.0.0.1:9095`, for a bridge running on the same computer.
