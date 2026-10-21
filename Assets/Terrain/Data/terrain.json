@@ -1,0 +1,15 @@
+{
+  "resolution": 2049,
+  "size": 204.8,
+  "baseElevation": 457.0,
+  "heightRange": 23.0,
+  "centerEasting": 540183.6255200001,
+  "centerNorthing": 7445923.27129,
+  "spawnX": 165.0,
+  "spawnZ": 45.400000000000006,
+  "spawnElevation": 16.354268711375603,
+  "spawnSlopeDegrees": 1.3830430416678476,
+  "crs": "EPSG:32622",
+  "heightSource": "Wingtra_flight_12_highres_dsm_10cm.tif",
+  "imageSource": "Wingtra_flight_12_highres_orthomosaic.tif"
+}
