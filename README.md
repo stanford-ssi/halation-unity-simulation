@@ -40,8 +40,8 @@ Leaving the terrain patch resets the rover to its starting point.
 
 The companion rover and web-controller repository is [stanford-ssi/halation](https://github.com/stanford-ssi/halation).
 ROS control requires a running ROS 2 rosbridge server; this Unity repository does not include the bridge or web app.
-The simulation bridge and web-controller changes are on the [`unity-simulation` branch](https://github.com/stanford-ssi/halation/tree/unity-simulation), pending [pull request #15](https://github.com/stanford-ssi/halation/pull/15).
-Until that pull request is merged, use that branch and follow its [local simulation setup](https://github.com/stanford-ssi/halation/blob/unity-simulation/docker/simulation/README.md).
+The simulation bridge and web controller are included on its default `master` branch.
+Follow the [local simulation setup](https://github.com/stanford-ssi/halation/blob/master/docker/simulation/README.md) or the quick start below.
 
 ### Teammate quick start
 
@@ -53,14 +53,22 @@ Each teammate runs Unity, the bridge, and the web controller on their own comput
 After cloning and opening this Unity project as described above, open a terminal in the folder where you keep your projects and run:
 
 ```sh
-git clone --branch unity-simulation --single-branch https://github.com/stanford-ssi/halation.git halation-simulation
+git clone https://github.com/stanford-ssi/halation.git halation-simulation
 cd halation-simulation
 docker compose -f docker-compose.sim.yaml up -d --build --wait
 cd web
 ```
 
-Copy `web/.env.example` to `web/.env.local` if it does not already exist.
-In `web/.env.local`, set `NEXT_PUBLIC_ROSBRIDGE_URL=ws://127.0.0.1:9095`.
+In the current `web` directory, copy `.env.example` to `.env.local` if it does not already exist.
+Make sure `.env.local` contains both settings:
+
+```dotenv
+NEXT_PUBLIC_ROSBRIDGE_URL=ws://127.0.0.1:9095
+NEXT_PUBLIC_SIMULATION_MODE=true
+```
+
+Simulation mode enables the command timing and connection handling used by Unity.
+Without this flag, the web controller retains its standard rover behavior.
 Then, from the `web` directory, run:
 
 ```sh
@@ -74,7 +82,7 @@ Use the browser joystick to drive and release it to brake.
 The browser and Unity each connect to the local bridge; neither needs to connect to a teammate's computer or the physical rover.
 To finish, stop the web server with Ctrl+C, exit Unity Play mode, and run `docker compose -f docker-compose.sim.yaml down` from the `halation-simulation` root.
 
-If the browser shows a different bridge address, check `.env.local` and restart the web server.
+If the browser shows a different bridge address or held commands stop after a second, check both settings in `.env.local` and restart the web server.
 If it cannot connect, make sure Docker is running and inspect `docker compose -f docker-compose.sim.yaml logs --tail=50 rosbridge` from the companion repository root.
 Keyboard controls are available immediately by switching Unity back with **Tab**, even without the bridge.
 
