@@ -43,6 +43,41 @@ ROS control requires a running ROS 2 rosbridge server; this Unity repository doe
 The simulation bridge and web-controller changes are on the [`unity-simulation` branch](https://github.com/stanford-ssi/halation/tree/unity-simulation), pending [pull request #15](https://github.com/stanford-ssi/halation/pull/15).
 Until that pull request is merged, use that branch and follow its [local simulation setup](https://github.com/stanford-ssi/halation/blob/unity-simulation/docker/simulation/README.md).
 
+### Teammate quick start
+
+Install Git, Unity Hub with Unity **6000.6.4f1**, Docker Desktop (or Docker Engine with Compose), and Node.js **22 or newer** with npm.
+Both repositories can be cloned without a GitHub account or an organization invitation.
+The Unity scene, rover model, terrain, and required assets are included in this repository.
+Each teammate runs Unity, the bridge, and the web controller on their own computer.
+
+After cloning and opening this Unity project as described above, open a terminal in the folder where you keep your projects and run:
+
+```sh
+git clone --branch unity-simulation --single-branch https://github.com/stanford-ssi/halation.git halation-simulation
+cd halation-simulation
+docker compose -f docker-compose.sim.yaml up -d --build --wait
+cd web
+```
+
+Copy `web/.env.example` to `web/.env.local` if it does not already exist.
+In `web/.env.local`, set `NEXT_PUBLIC_ROSBRIDGE_URL=ws://127.0.0.1:9095`.
+Then, from the `web` directory, run:
+
+```sh
+npm install
+npm run dev -- --hostname 127.0.0.1
+```
+
+Open <http://localhost:3000> and confirm that the displayed bridge address is `ws://127.0.0.1:9095`.
+In Unity, open `Assets/Scenes/RussellGlacier.unity`, press **Play**, click the Game view, and press **Tab** to select ROS control.
+Use the browser joystick to drive and release it to brake.
+The browser and Unity each connect to the local bridge; neither needs to connect to a teammate's computer or the physical rover.
+To finish, stop the web server with Ctrl+C, exit Unity Play mode, and run `docker compose -f docker-compose.sim.yaml down` from the `halation-simulation` root.
+
+If the browser shows a different bridge address, check `.env.local` and restart the web server.
+If it cannot connect, make sure Docker is running and inspect `docker compose -f docker-compose.sim.yaml logs --tail=50 rosbridge` from the companion repository root.
+Keyboard controls are available immediately by switching Unity back with **Tab**, even without the bridge.
+
 Set **Rover > Rover Ros Client > Bridge Url** to your rosbridge WebSocket address.
 The default is `ws://127.0.0.1:9095`, for a bridge running on the same computer.
 Press **Tab** in the Game view, or set **Rover Movement > Control Mode** to **Ros**.
